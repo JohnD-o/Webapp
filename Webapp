@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thump & Bump Quote Calculator</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --gray: #e5e7eb;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: #f8fafc;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1e293b;
+      margin-bottom: 2rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #334155;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .option-card {
+      background: white;
+      border: 2px solid var(--gray);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .option-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    .option-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .option-price {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .slider-container {
+      margin: 2rem 0;
+    }
+
+    .slider {
+      width: 100%;
+      height: 8px;
+      background: var(--gray);
+      border-radius: 4px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .slider::-webkit-slider-thumb:hover {
+      background: var(--primary-light);
+      transform: scale(1.1);
+    }
+
+    .hours-display {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      color: #334155;
+    }
+
+    .quote-result {
+      background: #1e293b;
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .total-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .per-hour {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quote Calculator</h1>
+
+  <div class="section">
+    <div class="section-title">Sound Package</div>
+    <div class="options-grid" id="soundOptions">
+      <div class="option-card" data-value="250-4-40">
+        <div class="option-title">Standard Package</div>
+        <div class="option-details">2 PAs, 1 Sub</div>
+        <div class="option-price">$250 base (4hrs)</div>
+        <div class="option-extra">+$40/hr after</div>
+      </div>
+      <div class="option-card" data-value="300-4-35">
+        <div class="option-title">Premium Package</div>
+        <div class="option-details">2 PAs, 2 Subs</div>
+        <div class="option-price">$300 base (4hrs)</div>
+        <div class="option-extra">+$35/hr after</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Visual Package</div>
+    <div class="options-grid" id="visualOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">No Visuals</div>
+        <div class="option-price">$0</div>
+      </div>
+      <div class="option-card" data-value="39">
+        <div class="option-title">Basic Visuals</div>
+        <div class="option-price">$39</div>
+      </div>
+      <div class="option-card" data-value="49">
+        <div class="option-title">Full Visuals</div>
+        <div class="option-price">$49</div>
+      </div>
+      <div class="option-card" data-value="80">
+        <div class="option-title">Interactive AV</div>
+        <div class="option-price">$80</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Power & Cooling</div>
+    <div class="options-grid" id="addonOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">None</div>
+        <div class="option-price">$0</div>
+      </div>
+      <div class="option-card" data-value="250">
+        <div class="option-title">Outdoor Power</div>
+        <div class="option-price">$250</div>
+      </div>
+      <div class="option-card" data-value="250">
+        <div class="option-title">Heat Advisory</div>
+        <div class="option-price">$250</div>
+      </div>
+      <div class="option-card" data-value="270">
+        <div class="option-title">Complete Package</div>
+        <div class="option-details">Outdoor + Heat + AV Promo</div>
+        <div class="option-price">$270</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-container">
+    <div class="section-title">Event Duration</div>
+    <input type="range" min="1" max="12" value="4" class="slider" id="hoursSlider">
+    <div class="hours-display" id="hoursDisplay">4 hours</div>
+  </div>
+
+  <div class="quote-result" id="quoteResult">
+    <div class="total-amount">$250</div>
+    <div class="per-hour">$62.50 per hour</div>
+  </div>
+
+  <script>
+    let selectedOptions = {
+      sound: '250-4-40',
+      visual: '0',
+      addon: '0'
+    };
+
+    function initializeOptionCards() {
+      ['sound', 'visual', 'addon'].forEach(type => {
+        document.querySelectorAll(`#${type}Options .option-card`).forEach(card => {
+          card.addEventListener('click', () => {
+            // Remove selection from other cards in the same group
+            document.querySelectorAll(`#${type}Options .option-card`).forEach(c => 
+              c.classList.remove('selected')
+            );
+            
+            // Select clicked card
+            card.classList.add('selected');
+            selectedOptions[type] = card.dataset.value;
+            calculateQuote();
+          });
+        });
+
+        // Select first option by default
+        const firstCard = document.querySelector(`#${type}Options .option-card`);
+        if (firstCard) firstCard.classList.add('selected');
+      });
+    }
+
+    function calculateQuote() {
+      const [base, included, extra] = selectedOptions.sound.split('-').map(Number);
+      const visual = Number(selectedOptions.visual);
+      const addon = Number(selectedOptions.addon);
+      const hours = Number(document.getElementById('hoursSlider').value);
+
+      let total = base + visual + addon;
+      let extraHours = Math.max(0, hours - included);
+      if (extraHours > 0) total += extraHours * extra;
+
+      const perHour = (total / hours).toFixed(2);
+
+      document.querySelector('#quoteResult .total-amount').innerText = `$${total}`;
+      document.querySelector('#quoteResult .per-hour').innerText = `$${perHour} per hour`;
+    }
+
+    // Initialize hours slider
+    const hoursSlider = document.getElementById('hoursSlider');
+    const hoursDisplay = document.getElementById('hoursDisplay');
+    
+    hoursSlider.addEventListener('input', (e) => {
+      const hours = e.target.value;
+      hoursDisplay.innerText = `${hours} hour${hours === '1' ? '' : 's'}`;
+      calculateQuote();
+    });
+
+    // Initialize the calculator
+    initializeOptionCards();
+    calculateQuote();
+  </script>
+</body>
+</html>

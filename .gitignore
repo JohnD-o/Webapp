@@ -43,4 +43,11 @@ coverage/
 
 # Misc
 .cache/
-.temp/ 
+.temp/
+
+# New additions
+/.pnp
+.pnp.js
+
+# Production
+/build 

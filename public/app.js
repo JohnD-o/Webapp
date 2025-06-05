@@ -7,6 +7,96 @@ let selectedOptions = {
   fuel: '0'
 };
 
+// Base location (78260 - San Antonio area)
+const BASE_LOCATION = [-98.4573, 29.7079]; // San Antonio, TX (78260) coordinates
+const RATE_PER_MILE = 0.65;
+let travelDistance = 0;
+
+// OpenRouteService API configuration
+let ORS_API_KEY = null;
+const ORS_API_URL = 'https://api.openrouteservice.org/v2/matrix/driving-car';
+
+// Fetch API key from server
+async function initializeApiKey() {
+  try {
+    const response = await fetch('/api/config');
+    if (!response.ok) {
+      throw new Error('Failed to load configuration');
+    }
+    const config = await response.json();
+    if (config.error) {
+      throw new Error(config.message || 'API configuration error');
+    }
+    ORS_API_KEY = config.apiKey;
+    console.log('API configuration loaded');
+    return true;
+  } catch (error) {
+    console.error('Error loading API configuration:', error);
+    document.getElementById('distanceDisplay').textContent = 'API configuration error';
+    return false;
+  }
+}
+
+async function calculateDistance(address) {
+  // Check if API key is not configured
+  if (!ORS_API_KEY) {
+    document.getElementById('distanceDisplay').textContent = 'API not configured';
+    return;
+  }
+
+  try {
+    // First, geocode the address to get coordinates
+    const geocodeUrl = `https://api.openrouteservice.org/geocode/search?api_key=${ORS_API_KEY}&text=${encodeURIComponent(address)}`;
+    const geocodeResponse = await fetch(geocodeUrl);
+    if (!geocodeResponse.ok) {
+      throw new Error('Geocoding failed');
+    }
+    const geocodeData = await geocodeResponse.json();
+
+    if (!geocodeData.features || geocodeData.features.length === 0) {
+      throw new Error('Address not found');
+    }
+
+    const [lng, lat] = geocodeData.features[0].geometry.coordinates;
+
+    // Calculate matrix distance
+    const response = await fetch(ORS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': ORS_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        locations: [BASE_LOCATION, [lng, lat]],
+        metrics: ['distance'],
+        units: 'mi'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Distance calculation failed');
+    }
+
+    const data = await response.json();
+    travelDistance = data.distances[0][1];
+    
+    // Update display
+    const distanceDisplay = document.getElementById('distanceDisplay');
+    distanceDisplay.textContent = `${travelDistance.toFixed(1)} miles ($${(travelDistance * RATE_PER_MILE).toFixed(2)})`;
+    
+    // Recalculate quote
+    calculateQuote();
+  } catch (error) {
+    console.error('Error calculating distance:', error);
+    document.getElementById('distanceDisplay').textContent = error.message || 'Error calculating distance';
+  }
+}
+
+// Add event listener for address input
+document.getElementById('eventAddress').addEventListener('change', (e) => {
+  calculateDistance(e.target.value);
+});
+
 function initializeOptionCards() {
   ['sound', 'dj', 'visual', 'addon', 'water', 'fuel'].forEach(type => {
     document.querySelectorAll(`#${type}Options .option-card`).forEach(card => {
@@ -127,13 +217,68 @@ function calculateQuote() {
       fuelCost = baseFuel + (extraHours * hourlyRate);
     }
   }
+
+  // Calculate travel cost
+  const travelCost = travelDistance * RATE_PER_MILE;
   
   // Calculate total
-  const total = soundBase + soundExtra + visual + djCost + addonBase + addonExtra + waterCost + fuelCost;
+  const total = soundBase + soundExtra + visual + djCost + addonBase + addonExtra + waterCost + fuelCost + travelCost;
   const perHour = (total / hours).toFixed(2);
 
-  document.querySelector('#quoteResult .total-amount').innerText = `$${total}`;
-  document.querySelector('#quoteResult .per-hour').innerText = `$${perHour} per hour`;
+  // Update the display with cost breakdown
+  const quoteResult = document.querySelector('#quoteResult');
+  quoteResult.innerHTML = `
+    <div class="total-amount">$${total.toFixed(2)}</div>
+    <div class="cost-breakdown">
+      <div class="breakdown-item">
+        <span class="breakdown-label">Base Package:</span>
+        <span>$${soundBase}</span>
+      </div>
+      ${soundExtra ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Extra Hours:</span>
+          <span>$${soundExtra}</span>
+        </div>
+      ` : ''}
+      ${visual ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Visuals:</span>
+          <span>$${visual}</span>
+        </div>
+      ` : ''}
+      ${djCost ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">DJ Services:</span>
+          <span>$${djCost}</span>
+        </div>
+      ` : ''}
+      ${addonBase + addonExtra ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Add-ons:</span>
+          <span>$${addonBase + addonExtra}</span>
+        </div>
+      ` : ''}
+      ${waterCost ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Water Service:</span>
+          <span>$${waterCost}</span>
+        </div>
+      ` : ''}
+      ${fuelCost ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Fuel Service:</span>
+          <span>$${fuelCost}</span>
+        </div>
+      ` : ''}
+      ${travelCost ? `
+        <div class="breakdown-item">
+          <span class="breakdown-label">Travel Cost:</span>
+          <span>$${travelCost.toFixed(2)}</span>
+        </div>
+      ` : ''}
+    </div>
+    <div class="per-hour">$${perHour} per hour</div>
+  `;
 }
 
 // Initialize hours slider
@@ -147,5 +292,7 @@ hoursSlider.addEventListener('input', (e) => {
 });
 
 // Initialize the calculator
-initializeOptionCards();
-calculateQuote(); 
+initializeApiKey().then(() => {
+  initializeOptionCards();
+  calculateQuote();
+}); 
