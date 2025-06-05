@@ -19,23 +19,39 @@ const ORS_API_URL = 'https://api.openrouteservice.org/v2/matrix/driving-car';
 // Fetch API key from server
 async function initializeApiKey() {
   try {
+    console.log('Attempting to fetch API configuration...');
+    
     // Get the current hostname
     const hostname = window.location.origin;
-    const response = await fetch(`${hostname}/api/config`);
+    const configUrl = `${hostname}/api/config`;
+    console.log('Fetching from:', configUrl);
+    
+    const response = await fetch(configUrl);
+    console.log('Response status:', response.status);
     
     if (!response.ok) {
-      throw new Error('Failed to load configuration');
+      const errorText = await response.text();
+      console.error('Response not OK:', errorText);
+      throw new Error(`Failed to load configuration: ${response.status}`);
     }
+
     const config = await response.json();
+    console.log('Configuration received:', { success: !!config.apiKey, message: config.message });
+    
     if (config.error) {
       throw new Error(config.message || 'API configuration error');
     }
+    
+    if (!config.apiKey) {
+      throw new Error('No API key received in configuration');
+    }
+
     ORS_API_KEY = config.apiKey;
-    console.log('API configuration loaded');
+    console.log('API configuration loaded successfully');
     return true;
   } catch (error) {
     console.error('Error loading API configuration:', error);
-    document.getElementById('distanceDisplay').textContent = 'API configuration error';
+    document.getElementById('distanceDisplay').textContent = `Configuration error: ${error.message}`;
     return false;
   }
 }
