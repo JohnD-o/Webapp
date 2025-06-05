@@ -33,7 +33,7 @@ npm install
 
 3. Create a `.env` file in the root directory:
 ```bash
-OPENROUTE_API_KEY=your_api_key_here
+ORS_API=your_api_key_here
 ```
 
 4. Run the development server:
@@ -55,7 +55,7 @@ vercel link
 
 3. Add your OpenRouteService API key to Vercel:
 ```bash
-vercel env add OPENROUTE_API_KEY
+vercel env add ORS_API
 ```
 
 4. Deploy to Vercel:
@@ -67,7 +67,7 @@ vercel --prod
 
 The following environment variables are required:
 
-- `OPENROUTE_API_KEY`: Your OpenRouteService API key
+- `ORS_API`: Your OpenRouteService API key
 
 ## Contributing
 

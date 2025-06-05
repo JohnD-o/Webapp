@@ -1,7 +1,7 @@
 module.exports = async (req, res) => {
   try {
-    // In Vercel, we'll use environment variables instead of Vault
-    const apiKey = process.env.OPENROUTE_API_KEY;
+    // Using the environment variable name as set in Vercel
+    const apiKey = process.env.ORS_API;
     
     if (!apiKey) {
       throw new Error('API key not configured');
