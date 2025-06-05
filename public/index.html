@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thump & Bump Quote Calculator</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Quote Calculator</h1>
+
+  <div class="section">
+    <div class="section-title">Base Sound Package</div>
+    <div class="options-grid" id="soundOptions">
+      <div class="option-card" data-value="250-4-40">
+        <div class="option-title">Standard Package</div>
+        <div class="option-details">2 PAs, 1 Sub</div>
+        <div class="option-price">$250 base (4hrs)</div>
+        <div class="option-extra">+$40/hr after</div>
+      </div>
+      <div class="option-card" data-value="300-4-35">
+        <div class="option-title">Premium Package</div>
+        <div class="option-details">2 PAs, 2 Subs</div>
+        <div class="option-price">$300 base (4hrs)</div>
+        <div class="option-extra">+$35/hr after</div>
+      </div>
+      <div class="option-card premium-card" data-value="350-4-20">
+        <div class="option-title">Full Stack Bundle</div>
+        <div class="option-details">2 PAs, 2 Subs + Full Visuals</div>
+        <div class="option-price">$350 base (4hrs)</div>
+        <div class="option-extra">+$20/hr after</div>
+        <div class="option-badge">Best Value</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">DJ Services</div>
+    <div class="options-grid" id="djOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">No DJ</div>
+        <div class="option-details">Self-managed music</div>
+        <div class="option-price">$0</div>
+      </div>
+      <div class="option-card" data-value="100">
+        <div class="option-title">Professional DJ</div>
+        <div class="option-details">Full event coverage</div>
+        <div class="option-price">$100/hr</div>
+        <div class="option-features">
+          <div class="feature">Professional mixing</div>
+          <div class="feature">Crowd reading expertise</div>
+          <div class="feature">Taking requests</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="150-1-0">
+        <div class="option-title">Power Hour Set</div>
+        <div class="option-details">One hour of pure energy</div>
+        <div class="option-price">$150 flat</div>
+        <div class="option-features">
+          <div class="feature">Perfect for peak party hour</div>
+          <div class="feature">High-energy performance</div>
+          <div class="feature">Curated playlist prep</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Visual Package</div>
+    <div class="options-grid" id="visualOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">No Visuals</div>
+        <div class="option-price">$0</div>
+      </div>
+      <div class="option-card" data-value="39">
+        <div class="option-title">Basic Light Setup</div>
+        <div class="option-details">Classic setup</div>
+        <div class="option-price">$39</div>
+        <div class="option-features">
+          <div class="feature">Fixed strobe lights</div>
+          <div class="feature">Reactive Spinning globe light</div>
+          <div class="feature">Adds atmosphere</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="49">
+        <div class="option-title">Premium Light Setup</div>
+        <div class="option-details">The complete experience</div>
+        <div class="option-price">$49</div>
+        <div class="option-features">
+          <div class="feature">Dynamic light spinners</div>
+          <div class="feature">Reactive lighting</div>
+          <div class="feature">Fog Machine included</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="80">
+        <div class="option-title">Immersive A/V Experience</div>
+        <div class="option-details">Interactive controller included </div>
+        <div class="option-price">$80</div>
+        <div class="option-features">
+          <div class="feature">Live crowd feed with retro effects</div>
+          <div class="feature">CRT-style effects with pulsing beat sync</div>
+          <div class="feature">Projected on wall or monitor</div>
+        </div>
+        <div class="option-badge">Most Unique</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Power & Cooling</div>
+    <div class="options-grid" id="addonOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">None</div>
+        <div class="option-price">$0</div>
+      </div>
+      <div class="option-card" data-value="250-8-40">
+        <div class="option-title">Outdoor Power Package</div>
+        <div class="option-details">Generator + Transport</div>
+        <div class="option-price">$250 base (8hrs)</div>
+        <div class="option-extra">+$40/hr after</div>
+        <div class="option-features">
+          <div class="feature"> Professional Generator</div>
+          <div class="feature"> Includes Transport & Fuel</div>
+          <div class="feature"> Setup & Operation</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="250-6-50">
+        <div class="option-title">Heat Advisory Package</div>
+        <div class="option-details">Portable AC Unit + Transport</div>
+        <div class="option-price">$250 base (6hrs)</div>
+        <div class="option-extra">+$50/hr after</div>
+        <div class="option-features">
+          <div class="feature"> Industrial Cooling Fan</div>
+          <div class="feature"> Includes Transport & Water (Huge Tank)</div>
+          <div class="feature"> Setup & Maintenance</div>
+        </div>
+      </div>
+      <div class="option-card premium-card" data-value="270-6-60">
+        <div class="option-title">Power & Cooling Bundle</div>
+        <div class="option-details">Generator + Cooling + AV Promo</div>
+        <div class="option-price">$270 base (6hrs)</div>
+        <div class="option-extra">+$60/hr after</div>
+        <div class="option-features">
+          <div class="feature"> Both Power & Cooling</div>
+          <div class="feature"> Includes All Equipment</div>
+          <div class="feature"> Best Value Package</div>
+        </div>
+        <div class="option-badge">Best Value</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="fuelOptionsSection" style="display: none;">
+    <div class="section-title">Fuel Supply Options</div>
+    <div class="options-grid" id="fuelOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">Client Fuel Supply</div>
+        <div class="option-details">Client provides gas</div>
+        <div class="option-price">$0</div>
+        <div class="option-features">
+          <div class="feature">Client supplies fresh gasoline</div>
+          <div class="feature">Must be 87+ octane</div>
+          <div class="feature">~1 gallon per hour needed</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="50-8-10">
+        <div class="option-title">Fuel Supply Package</div>
+        <div class="option-details">Best for 6+ hour events</div>
+        <div class="option-price">$50 base (8hrs)</div>
+        <div class="option-extra">+$10/hr after</div>
+        <div class="option-features">
+          <div class="feature">Includes delivery & handling</div>
+          <div class="feature">Runtime insurance included</div>
+          <div class="feature">Extra buffer for surges</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="10-0-10">
+        <div class="option-title">Hourly Fuel Service</div>
+        <div class="option-details">Best for shorter events</div>
+        <div class="option-price">$10 per hour</div>
+        <div class="option-features">
+          <div class="feature">Pay only for hours needed</div>
+          <div class="feature">Includes delivery & handling</div>
+          <div class="feature">1 gallon per hour coverage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="waterOptionsSection" style="display: none;">
+    <div class="section-title">Water Supply Options</div>
+    <div class="options-grid" id="waterOptions">
+      <div class="option-card" data-value="0">
+        <div class="option-title">Client Water Access</div>
+        <div class="option-details">On-site water hookup</div>
+        <div class="option-price">$0</div>
+        <div class="option-features">
+          <div class="feature">Client provides water access</div>
+          <div class="feature">Must have outdoor spigot</div>
+          <div class="feature">We handle the hookup</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="50-6-10">
+        <div class="option-title">Water Supply Package</div>
+        <div class="option-details">Best for 6+ hour events</div>
+        <div class="option-price">$50 base (6hrs)</div>
+        <div class="option-extra">+$10/hr after</div>
+        <div class="option-features">
+          <div class="feature">Includes delivery & setup</div>
+          <div class="feature">All equipment provided</div>
+          <div class="feature">Continuous monitoring</div>
+        </div>
+      </div>
+      <div class="option-card" data-value="10-0-10">
+        <div class="option-title">Hourly Water Service</div>
+        <div class="option-details">Best for shorter events</div>
+        <div class="option-price">$10 per hour</div>
+        <div class="option-features">
+          <div class="feature">Pay only for hours needed</div>
+          <div class="feature">~3 gallons per hour</div>
+          <div class="feature">Includes delivery & setup</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-container">
+    <div class="section-title">Event Duration</div>
+    <input type="range" min="1" max="12" value="4" class="slider" id="hoursSlider">
+    <div class="hours-display" id="hoursDisplay">4 hours</div>
+  </div>
+
+  <div class="quote-result" id="quoteResult">
+    <div class="total-amount">$250</div>
+    <div class="per-hour">$62.50 per hour</div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html> 

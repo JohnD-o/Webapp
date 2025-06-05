@@ -1,0 +1,247 @@
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --gray: #e5e7eb;
+  --premium: #8b5cf6;
+  --premium-light: #a78bfa;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #f8fafc;
+}
+
+h1 {
+  text-align: center;
+  color: #1e293b;
+  margin-bottom: 2rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #334155;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.option-card {
+  background: white;
+  border: 2px solid var(--gray);
+  border-radius: 8px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option-card.selected {
+  border-color: var(--primary);
+  background: #eff6ff;
+}
+
+.option-card.premium-card {
+  border-color: var(--premium);
+  background: #f5f3ff;
+}
+
+.option-card.premium-card.selected {
+  border-color: var(--premium);
+  background: #ede9fe;
+  box-shadow: 0 8px 16px -4px rgb(139 92 246 / 0.2);
+}
+
+.option-card.premium-card .option-price {
+  color: var(--premium);
+}
+
+.option-badge {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  background: var(--premium);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.option-card.premium-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -4px rgb(139 92 246 / 0.3);
+}
+
+.option-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.option-features {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--gray);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature {
+  font-size: 0.85rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature::before {
+  content: "✓";
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.premium-card .feature::before {
+  color: var(--premium);
+}
+
+.option-details {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
+
+.option-price {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.option-extra {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.slider-container {
+  margin: 2rem 0;
+}
+
+.slider {
+  width: 100%;
+  height: 8px;
+  background: var(--gray);
+  border-radius: 4px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: var(--primary-light);
+  transform: scale(1.1);
+}
+
+.hours-display {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  color: #334155;
+}
+
+.quote-result {
+  background: #1e293b;
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.total-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.per-hour {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.location-input {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.address-field {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--gray);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.address-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.distance-result {
+  display: flex;
+  justify-content: space-between;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.cost-breakdown {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.breakdown-label {
+  color: rgba(255,255,255,0.8);
+} 
