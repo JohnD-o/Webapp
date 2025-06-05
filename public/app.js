@@ -19,7 +19,10 @@ const ORS_API_URL = 'https://api.openrouteservice.org/v2/matrix/driving-car';
 // Fetch API key from server
 async function initializeApiKey() {
   try {
-    const response = await fetch('/api/config');
+    // Get the current hostname
+    const hostname = window.location.origin;
+    const response = await fetch(`${hostname}/api/config`);
+    
     if (!response.ok) {
       throw new Error('Failed to load configuration');
     }
