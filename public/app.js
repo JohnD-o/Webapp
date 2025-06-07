@@ -29,7 +29,7 @@ const LOCATIONS = {
       sound: {
         standard: '300-4-45',  // 2 PAs, 1 Sub
         premium: '350-4-45',   // 2 PAs, 2 Subs
-        wallOfBass: '450-4-35', // 2 PAs, 4 Subs + Free Lights
+        wallOfBassBundle: '450-4-35', // 2 PAs, 4 Subs + Free Lights
         fullStack: '550-4-40'   // 4 PAs, 4 Subs + Free Lights
       },
       dj: {
@@ -607,7 +607,7 @@ function updatePricingForLocation() {
 
   // Update Chicago-only package if visible
   if (currentLocation === 'chicago' && chicagoPackage) {
-    const wallOfBassPrice = pricing.sound.wallOfBass;
+    const wallOfBassPrice = pricing.sound.wallOfBassBundle;
     const [base, hours, extra] = wallOfBassPrice.split('-').map(Number);
     chicagoPackage.dataset.value = wallOfBassPrice;
     chicagoPackage.querySelector('.option-price').textContent = `$${base} base (${hours}hrs)`;
