@@ -216,26 +216,116 @@ function initializeOptionCards() {
           const waterSection = document.getElementById('waterOptionsSection');
           const fuelSection = document.getElementById('fuelOptionsSection');
           
-          // Show/hide water options for cooling packages
-          if (card.dataset.value === '250-6-50' || card.dataset.value === '270-6-60') {
-            waterSection.style.display = 'block';
+          if (currentLocation === 'chicago') {
+            // For Chicago, show appropriate fuel options based on selection
+            const hasGenerator = card.dataset.value === '250-8-40';
+            const hasHeater = card.dataset.value === '350-9-60';
+            const hasBundle = card.dataset.value === '270-6-60';
+
+            if (hasGenerator || hasHeater || hasBundle) {
+              fuelSection.style.display = 'block';
+              waterSection.style.display = 'none';
+              selectedOptions.water = '0';
+
+              // Show/hide specific fuel options
+              document.querySelectorAll('#fuelOptions .option-card').forEach(fuelCard => {
+                if (hasBundle) {
+                  // Show bundle options and client supply
+                  fuelCard.style.display = 
+                    (fuelCard.classList.contains('chicago-only') && 
+                     (fuelCard.classList.contains('bundle-only') || fuelCard.dataset.value === '0')) || 
+                    fuelCard.dataset.value === '0' ? 'block' : 'none';
+
+                  // For client supply option, show bundle-specific features
+                  if (fuelCard.dataset.value === '0') {
+                    fuelCard.querySelectorAll('.feature').forEach(feature => {
+                      if (feature.classList.contains('bundle-only')) {
+                        feature.style.display = 'flex';
+                      } else {
+                        feature.style.display = 'none';
+                      }
+                    });
+                  }
+                } else if (hasGenerator) {
+                  // Show generator-specific options and client supply
+                  fuelCard.style.display = 
+                    (fuelCard.classList.contains('chicago-only') && 
+                     fuelCard.classList.contains('generator-only')) || 
+                    fuelCard.dataset.value === '0' ? 'block' : 'none';
+
+                  // Show generator-specific client supply features
+                  if (fuelCard.dataset.value === '0') {
+                    fuelCard.querySelectorAll('.feature').forEach(feature => {
+                      if (feature.classList.contains('generator-only')) {
+                        feature.style.display = 'flex';
+                      } else {
+                        feature.style.display = 'none';
+                      }
+                    });
+                  }
+                } else if (hasHeater) {
+                  // Show heater-specific options and client supply
+                  fuelCard.style.display = 
+                    (fuelCard.classList.contains('chicago-only') && 
+                     fuelCard.classList.contains('heater-only')) || 
+                    fuelCard.dataset.value === '0' ? 'block' : 'none';
+
+                  // Show heater-specific client supply features
+                  if (fuelCard.dataset.value === '0') {
+                    fuelCard.querySelectorAll('.feature').forEach(feature => {
+                      if (feature.classList.contains('heater-only')) {
+                        feature.style.display = 'flex';
+                      } else {
+                        feature.style.display = 'none';
+                      }
+                    });
+                  }
+                }
+              });
+            } else {
+              fuelSection.style.display = 'none';
+              waterSection.style.display = 'none';
+              selectedOptions.water = '0';
+              selectedOptions.fuel = '0';
+              document.querySelectorAll('#waterOptions .option-card, #fuelOptions .option-card').forEach(c => 
+                c.classList.remove('selected')
+              );
+            }
           } else {
-            waterSection.style.display = 'none';
-            selectedOptions.water = '0';
-            document.querySelectorAll('#waterOptions .option-card').forEach(c => 
-              c.classList.remove('selected')
-            );
-          }
-          
-          // Show/hide fuel options for generator packages
-          if (card.dataset.value === '250-8-40' || card.dataset.value === '270-6-60') {
-            fuelSection.style.display = 'block';
-          } else {
-            fuelSection.style.display = 'none';
-            selectedOptions.fuel = '0';
-            document.querySelectorAll('#fuelOptions .option-card').forEach(c => 
-              c.classList.remove('selected')
-            );
+            // For SA/ATX, show water options for cooling packages
+            if (card.dataset.value === '250-6-50' || card.dataset.value === '270-6-60') {
+              waterSection.style.display = 'block';
+            } else {
+              waterSection.style.display = 'none';
+              selectedOptions.water = '0';
+              document.querySelectorAll('#waterOptions .option-card').forEach(c => 
+                c.classList.remove('selected')
+              );
+            }
+            
+            // Show/hide fuel options for generator packages
+            if (card.dataset.value === '250-8-40' || card.dataset.value === '270-6-60') {
+              fuelSection.style.display = 'block';
+              // Show SA/ATX specific options
+              document.querySelectorAll('#fuelOptions .option-card').forEach(fuelCard => {
+                fuelCard.style.display = fuelCard.classList.contains('sa-atx-only') || 
+                                       fuelCard.dataset.value === '0' ? 'block' : 'none';
+                // Show SA/ATX specific features
+                fuelCard.querySelectorAll('.feature').forEach(feature => {
+                  if (feature.classList.contains('sa-atx-only')) {
+                    feature.style.display = 'flex';
+                  } else {
+                    feature.style.display = 'none';
+                  }
+                });
+              });
+            } else {
+              fuelSection.style.display = 'none';
+              selectedOptions.fuel = '0';
+              document.querySelectorAll('#fuelOptions .option-card').forEach(c => 
+                c.classList.remove('selected')
+              );
+            }
           }
         }
 
@@ -265,11 +355,18 @@ function calculateQuote() {
   const soundExtra = calculateExtraHoursCost(selectedOptions.sound, hours);
   
   // Calculate visual cost (0 if bundle is selected)
-  const visual = selectedOptions.sound === '350-4-20' ? 0 : Number(selectedOptions.visual);
+  const visual = (selectedOptions.sound === '350-4-20' || selectedOptions.sound === '450-4-35') ? 0 : Number(selectedOptions.visual);
   
-  // Calculate DJ cost (hourly rate for all hours)
-  const djRate = Number(selectedOptions.dj.split('-')[0]);
-  const djCost = selectedOptions.dj.includes('-') ? djRate : (djRate > 0 ? djRate * hours : 0);
+  // Calculate DJ cost
+  const djParts = selectedOptions.dj.split('-');
+  let djCost = 0;
+  if (djParts.length === 1) {
+    // Hourly rate (professional DJ)
+    djCost = Number(djParts[0]) * hours;
+  } else if (djParts.length === 3) {
+    // Power Hour (flat rate)
+    djCost = Number(djParts[0]);
+  }
   
   // Calculate addon package cost
   const [addonBase] = selectedOptions.addon.split('-').map(Number) || [0];
@@ -416,11 +513,56 @@ function updatePricingForLocation() {
     calculateDistance(addressField.value);
   }
 
+  // First, hide water and fuel sections by default
+  const waterSection = document.getElementById('waterOptionsSection');
+  const fuelSection = document.getElementById('fuelOptionsSection');
+  waterSection.style.display = 'none';
+  fuelSection.style.display = 'none';
+
+  // Reset all selections and hide all option-specific sections
+  ['sound', 'dj', 'visual', 'addon', 'water', 'fuel'].forEach(type => {
+    // Deselect all cards in this category
+    document.querySelectorAll(`#${type}Options .option-card`).forEach(c => {
+      c.classList.remove('selected');
+      // Reset any location-specific displays
+      if (c.classList.contains('sa-atx-only')) {
+        c.style.display = currentLocation === 'sa-atx' ? 'block' : 'none';
+      } else if (c.classList.contains('chicago-only')) {
+        c.style.display = currentLocation === 'chicago' ? 'block' : 'none';
+      }
+    });
+    // Reset the selected option to '0'
+    selectedOptions[type] = '0';
+  });
+
   // Show/hide Chicago-specific package
   const chicagoPackage = document.querySelector('#soundOptions .chicago-only');
   if (chicagoPackage) {
     chicagoPackage.style.display = currentLocation === 'chicago' ? 'block' : 'none';
   }
+
+  // Show/hide location-specific addon packages
+  document.querySelectorAll('#addonOptions .option-card').forEach(card => {
+    if (currentLocation === 'chicago') {
+      // For Chicago, hide SA/ATX specific options and show Chicago options
+      if (card.classList.contains('sa-atx-only')) {
+        card.style.display = 'none';
+      } else if (card.classList.contains('chicago-only')) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'block'; // Show non-location specific cards
+      }
+    } else {
+      // For SA/ATX, hide Chicago specific options and show SA/ATX options
+      if (card.classList.contains('chicago-only')) {
+        card.style.display = 'none';
+      } else if (card.classList.contains('sa-atx-only')) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'block'; // Show non-location specific cards
+      }
+    }
+  });
 
   // Show/hide location-specific visual options
   document.querySelectorAll('#visualOptions .option-card').forEach(card => {
@@ -491,19 +633,19 @@ function updatePricingForLocation() {
     const prices = [pricing.visual.none, pricing.visual.basic, pricing.visual.premium, pricing.visual.immersive];
     if (prices[index]) {
       card.dataset.value = prices[index];
-      card.querySelector('.option-price').textContent = `$${prices[index]}`;
+      if (prices[index] !== '0') {
+        card.querySelector('.option-price').textContent = `$${prices[index]}`;
+      }
     }
   });
 
-  // Reset selections to first option in each category
-  ['sound', 'dj', 'visual', 'addon', 'water', 'fuel'].forEach(type => {
-    const firstCard = document.querySelector(`#${type}Options .option-card`);
-    if (firstCard) {
-      document.querySelectorAll(`#${type}Options .option-card`).forEach(c => 
-        c.classList.remove('selected')
-      );
-      firstCard.classList.add('selected');
-      selectedOptions[type] = firstCard.dataset.value;
+  // Select first visible option in each category
+  ['sound', 'dj', 'visual', 'addon'].forEach(type => {
+    // Find first visible card
+    const firstVisibleCard = document.querySelector(`#${type}Options .option-card:not([style*="display: none"])`);
+    if (firstVisibleCard) {
+      firstVisibleCard.classList.add('selected');
+      selectedOptions[type] = firstVisibleCard.dataset.value;
     }
   });
 

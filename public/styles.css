@@ -115,26 +115,35 @@ h1 {
 }
 
 .option-features {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--gray);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin-top: 10px;
+  text-align: left;
 }
 
 .feature {
-  font-size: 0.85rem;
-  color: #64748b;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  margin: 8px 0;
+  font-size: 0.9em;
+  color: #666;
 }
 
 .feature::before {
   content: "✓";
-  color: var(--primary);
+  margin-right: 8px;
+  color: #4CAF50;
   font-weight: bold;
+}
+
+/* Add spacing between feature groups */
+.feature + .feature {
+  margin-top: 4px;
+}
+
+/* Add extra spacing between different feature groups */
+.feature.generator-only + .feature.heater-only,
+.feature.heater-only + .feature.bundle-only,
+.feature.sa-atx-only + .feature.chicago-only {
+  margin-top: 12px;
 }
 
 .premium-card .feature::before {
@@ -321,9 +330,27 @@ h1 {
   position: relative;
 }
 
+.sa-atx-only {
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+  height: auto;
+  padding: 1.25rem;
+  margin: 0;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
 .chicago-only[style*="display: block"] {
   opacity: 1;
   height: auto;
   padding: 1.25rem;
   margin: 0;
+}
+
+.sa-atx-only[style*="display: none"] {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 } 

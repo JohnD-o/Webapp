@@ -154,31 +154,42 @@
         <div class="option-price">$250 base (8hrs)</div>
         <div class="option-extra">+$40/hr after</div>
         <div class="option-features">
-          <div class="feature"> Professional Generator</div>
-          <div class="feature"> Includes Transport & Fuel</div>
-          <div class="feature"> Setup & Operation</div>
+          <div class="feature">Professional Generator</div>
+          <div class="feature">Includes Transport & Fuel</div>
+          <div class="feature">Setup & Operation</div>
         </div>
       </div>
-      <div class="option-card" data-value="250-6-50">
+      <div class="option-card sa-atx-only" data-value="250-6-50" style="display: block;">
         <div class="option-title">Heat Advisory Package</div>
         <div class="option-details">Portable AC Unit + Transport</div>
         <div class="option-price">$250 base (6hrs)</div>
         <div class="option-extra">+$50/hr after</div>
         <div class="option-features">
-          <div class="feature"> Industrial Cooling Fan</div>
-          <div class="feature"> Includes Transport & Water (Huge Tank)</div>
-          <div class="feature"> Setup & Maintenance</div>
+          <div class="feature">Industrial Cooling Fan</div>
+          <div class="feature">Includes Transport & Water (Huge Tank)</div>
+          <div class="feature">Setup & Maintenance</div>
+        </div>
+      </div>
+      <div class="option-card chicago-only" style="display: none;" data-value="350-9-60">
+        <div class="option-title">Freeze Advisory Package</div>
+        <div class="option-details">70K BTU Kerosene Heater + Transport</div>
+        <div class="option-price">$350 base (9hrs)</div>
+        <div class="option-extra">+$60/hr after</div>
+        <div class="option-features">
+          <div class="feature">70,000 BTU Industrial Heater</div>
+          <div class="feature">Heats up to 1,750 sq ft</div>
+          <div class="feature">Includes Setup & Monitoring</div>
         </div>
       </div>
       <div class="option-card premium-card" data-value="270-6-60">
-        <div class="option-title">Power & Cooling Bundle</div>
-        <div class="option-details">Generator + Cooling + AV Promo</div>
+        <div class="option-title">Power & Climate Bundle</div>
+        <div class="option-details">Generator + Climate Control + AV Promo</div>
         <div class="option-price">$270 base (6hrs)</div>
         <div class="option-extra">+$60/hr after</div>
         <div class="option-features">
-          <div class="feature"> Both Power & Cooling</div>
-          <div class="feature"> Includes All Equipment</div>
-          <div class="feature"> Best Value Package</div>
+          <div class="feature">Both Power & Climate Control</div>
+          <div class="feature">Includes All Equipment</div>
+          <div class="feature">Best Value Package</div>
         </div>
         <div class="option-badge">Best Value</div>
       </div>
@@ -188,35 +199,132 @@
   <div class="section" id="fuelOptionsSection" style="display: none;">
     <div class="section-title">Fuel Supply Options</div>
     <div class="options-grid" id="fuelOptions">
+      <!-- Client Supply Options -->
       <div class="option-card" data-value="0">
         <div class="option-title">Client Fuel Supply</div>
-        <div class="option-details">Client provides gas</div>
+        <div class="option-details">Client provides fuel</div>
         <div class="option-price">$0</div>
         <div class="option-features">
-          <div class="feature">Client supplies fresh gasoline</div>
-          <div class="feature">Must be 87+ octane</div>
-          <div class="feature">~1 gallon per hour needed</div>
+          <!-- SA/ATX Options -->
+          <div class="feature sa-atx-only">Client supplies fresh gasoline</div>
+          <div class="feature sa-atx-only">Must be 87+ octane</div>
+          <div class="feature sa-atx-only">~1 gallon per hour needed</div>
+          
+          <!-- Chicago Generator Options -->
+          <div class="feature chicago-only generator-only" style="display: none;">Client supplies fresh gasoline</div>
+          <div class="feature chicago-only generator-only" style="display: none;">Must be 87+ octane</div>
+          <div class="feature chicago-only generator-only" style="display: none;">~1 gallon per hour needed</div>
+          
+          <!-- Chicago Heater Options -->
+          <div class="feature chicago-only heater-only" style="display: none;">Client supplies K-1 kerosene</div>
+          <div class="feature chicago-only heater-only" style="display: none;">Must be clear/water-free</div>
+          <div class="feature chicago-only heater-only" style="display: none;">~2 gallons per hour needed</div>
+
+          <!-- Chicago Bundle Options -->
+          <div class="feature chicago-only bundle-only" style="display: none;">Generator: 87+ octane gasoline</div>
+          <div class="feature chicago-only bundle-only" style="display: none;">Generator: ~1 gallon per hour</div>
+          <div class="feature chicago-only bundle-only" style="display: none;">Heater: K-1 grade kerosene</div>
+          <div class="feature chicago-only bundle-only" style="display: none;">Heater: ~2 gallons per hour</div>
         </div>
       </div>
-      <div class="option-card" data-value="50-8-10">
-        <div class="option-title">Fuel Supply Package</div>
+
+      <!-- SA/ATX Gasoline Options -->
+      <div class="option-card sa-atx-only" data-value="50-8-10">
+        <div class="option-title">Gasoline Package</div>
         <div class="option-details">Best for 6+ hour events</div>
         <div class="option-price">$50 base (8hrs)</div>
         <div class="option-extra">+$10/hr after</div>
         <div class="option-features">
+          <div class="feature">Fresh premium gasoline included</div>
+          <div class="feature">Full tank + backup supply</div>
           <div class="feature">Includes delivery & handling</div>
           <div class="feature">Runtime insurance included</div>
-          <div class="feature">Extra buffer for surges</div>
         </div>
       </div>
-      <div class="option-card" data-value="10-0-10">
-        <div class="option-title">Hourly Fuel Service</div>
+      <div class="option-card sa-atx-only" data-value="10-0-10">
+        <div class="option-title">Hourly Gas Service</div>
         <div class="option-details">Best for shorter events</div>
         <div class="option-price">$10 per hour</div>
         <div class="option-features">
+          <div class="feature">Fresh premium gasoline</div>
           <div class="feature">Pay only for hours needed</div>
           <div class="feature">Includes delivery & handling</div>
           <div class="feature">1 gallon per hour coverage</div>
+        </div>
+      </div>
+
+      <!-- Chicago Generator Gas Options -->
+      <div class="option-card chicago-only generator-only" style="display: none;" data-value="50-8-10">
+        <div class="option-title">Generator Gas Package</div>
+        <div class="option-details">Full tank + backup</div>
+        <div class="option-price">$50 base (8hrs)</div>
+        <div class="option-extra">+$10/hr after</div>
+        <div class="option-features">
+          <div class="feature">Fresh premium gasoline</div>
+          <div class="feature">10-gallon initial supply</div>
+          <div class="feature">Includes delivery & handling</div>
+          <div class="feature">Runtime insurance included</div>
+        </div>
+      </div>
+      <div class="option-card chicago-only generator-only" style="display: none;" data-value="10-0-10">
+        <div class="option-title">Hourly Generator Gas</div>
+        <div class="option-details">Pay as you go</div>
+        <div class="option-price">$10 per hour</div>
+        <div class="option-features">
+          <div class="feature">Fresh premium gasoline</div>
+          <div class="feature">Pay only for hours needed</div>
+          <div class="feature">Includes delivery & handling</div>
+          <div class="feature">1 gallon per hour coverage</div>
+        </div>
+      </div>
+
+      <!-- Chicago Kerosene Options -->
+      <div class="option-card chicago-only heater-only" style="display: none;" data-value="180-9-25">
+        <div class="option-title">Kerosene Package</div>
+        <div class="option-details">Full event coverage</div>
+        <div class="option-price">$180 base (9hrs)</div>
+        <div class="option-extra">+$25/hr after</div>
+        <div class="option-features">
+          <div class="feature">K-1 grade kerosene included</div>
+          <div class="feature">18 gallons initial supply</div>
+          <div class="feature">Includes delivery & handling</div>
+          <div class="feature">Continuous monitoring</div>
+        </div>
+      </div>
+      <div class="option-card chicago-only heater-only" style="display: none;" data-value="25-0-25">
+        <div class="option-title">Hourly Kerosene Service</div>
+        <div class="option-details">Pay as you go</div>
+        <div class="option-price">$25 per hour</div>
+        <div class="option-features">
+          <div class="feature">K-1 grade kerosene included</div>
+          <div class="feature">Pay only for hours needed</div>
+          <div class="feature">Includes delivery & handling</div>
+          <div class="feature">2 gallons per hour coverage</div>
+        </div>
+      </div>
+
+      <!-- Chicago Bundle Options -->
+      <div class="option-card chicago-only bundle-only" style="display: none;" data-value="230-9-35">
+        <div class="option-title">Complete Fuel Package</div>
+        <div class="option-details">Both Generator & Heater Fuel</div>
+        <div class="option-price">$230 base (9hrs)</div>
+        <div class="option-extra">+$35/hr after</div>
+        <div class="option-features">
+          <div class="feature">18 gallons K-1 kerosene</div>
+          <div class="feature">10 gallons premium gasoline</div>
+          <div class="feature">Includes all delivery & handling</div>
+          <div class="feature">Continuous monitoring</div>
+        </div>
+      </div>
+      <div class="option-card chicago-only bundle-only" style="display: none;" data-value="35-0-35">
+        <div class="option-title">Hourly Bundle Service</div>
+        <div class="option-details">Pay as you go for both</div>
+        <div class="option-price">$35 per hour</div>
+        <div class="option-features">
+          <div class="feature">Both fuels included</div>
+          <div class="feature">Pay only for hours needed</div>
+          <div class="feature">Includes all delivery & handling</div>
+          <div class="feature">Full coverage (3 gal/hr total)</div>
         </div>
       </div>
     </div>
