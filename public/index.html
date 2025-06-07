@@ -9,27 +9,52 @@
 <body>
   <h1>Quote Calculator</h1>
 
+  <div class="section location-selector">
+    <div class="section-title">Select Location</div>
+    <div class="options-grid" id="locationOptions">
+      <div class="option-card selected" data-location="sa-atx">
+        <div class="option-title">San Antonio / Austin</div>
+        <div class="option-details">Texas Metro Complex</div>
+      </div>
+      <div class="option-card" data-location="chicago">
+        <div class="option-title">Chicago</div>
+        <div class="option-details">Greater Chicago Area</div>
+      </div>
+    </div>
+  </div>
+
   <div class="section">
     <div class="section-title">Base Sound Package</div>
     <div class="options-grid" id="soundOptions">
       <div class="option-card" data-value="250-4-40">
         <div class="option-title">Standard Package</div>
-        <div class="option-details">2 PAs, 1 Sub</div>
+        <div class="option-details sa-atx-details">2 PAs, 1 Sub</div>
+        <div class="option-details chicago-details" style="display: none;">2 PAs, 1 Sub</div>
         <div class="option-price">$250 base (4hrs)</div>
         <div class="option-extra">+$40/hr after</div>
       </div>
       <div class="option-card" data-value="300-4-35">
         <div class="option-title">Premium Package</div>
-        <div class="option-details">2 PAs, 2 Subs</div>
+        <div class="option-details sa-atx-details">2 PAs, 2 Subs</div>
+        <div class="option-details chicago-details" style="display: none;">2 PAs, 2 Subs</div>
         <div class="option-price">$300 base (4hrs)</div>
         <div class="option-extra">+$35/hr after</div>
       </div>
-      <div class="option-card premium-card" data-value="350-4-20">
+      <div class="option-card chicago-only" data-value="500-4-35" style="display: none;">
+        <div class="option-title">Wall of Bass Package</div>
+        <div class="option-details chicago-details">2 PAs, 4 Subs + Free Lights</div>
+        <div class="option-price">$500 base (4hrs)</div>
+        <div class="option-extra">+$35/hr after</div>
+      </div>
+      <div class="option-card premium-card" data-value="450-4-25">
         <div class="option-title">Full Stack Bundle</div>
-        <div class="option-details">2 PAs, 2 Subs + Full Visuals</div>
-        <div class="option-price">$350 base (4hrs)</div>
-        <div class="option-extra">+$20/hr after</div>
-        <div class="option-badge">Best Value</div>
+        <div class="option-details sa-atx-details">2 PAs, 2 Subs + Full Visuals</div>
+        <div class="option-details chicago-details" style="display: none;">4 PAs, 4 Subs + Free Lights</div>
+        <div class="option-price">$450 base (4hrs)</div>
+        <div class="option-extra">+$25/hr after</div>
+        <div class="option-badge-container">
+          <div class="option-badge">Best Value</div>
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +97,7 @@
         <div class="option-title">No Visuals</div>
         <div class="option-price">$0</div>
       </div>
-      <div class="option-card" data-value="39">
+      <div class="option-card sa-atx-only">
         <div class="option-title">Basic Light Setup</div>
         <div class="option-details">Classic setup</div>
         <div class="option-price">$39</div>
@@ -82,7 +107,7 @@
           <div class="feature">Adds atmosphere</div>
         </div>
       </div>
-      <div class="option-card" data-value="49">
+      <div class="option-card sa-atx-only">
         <div class="option-title">Premium Light Setup</div>
         <div class="option-details">The complete experience</div>
         <div class="option-price">$49</div>
@@ -92,7 +117,7 @@
           <div class="feature">Fog Machine included</div>
         </div>
       </div>
-      <div class="option-card" data-value="80">
+      <div class="option-card sa-atx-only">
         <div class="option-title">Immersive A/V Experience</div>
         <div class="option-details">Interactive controller included </div>
         <div class="option-price">$80</div>
@@ -102,6 +127,16 @@
           <div class="feature">Projected on wall or monitor</div>
         </div>
         <div class="option-badge">Most Unique</div>
+      </div>
+      <div class="option-card chicago-only" style="display: none;">
+        <div class="option-title">Basic Light Setup</div>
+        <div class="option-details">Classic setup</div>
+        <div class="option-price">$10</div>
+        <div class="option-features">
+          <div class="feature">Fixed strobe lights</div>
+          <div class="feature">Reactive Spinning globe light</div>
+          <div class="feature">Adds atmosphere</div>
+        </div>
       </div>
     </div>
   </div>

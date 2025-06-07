@@ -22,6 +22,8 @@ h1 {
 
 .section {
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .section-title {
@@ -35,6 +37,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
+  position: relative;
 }
 
 .option-card {
@@ -48,6 +51,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  isolation: isolate;
 }
 
 .option-card.selected {
@@ -70,6 +74,15 @@ h1 {
   color: var(--premium);
 }
 
+.option-badge-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+
 .option-badge {
   position: absolute;
   top: -12px;
@@ -81,6 +94,9 @@ h1 {
   font-size: 0.8rem;
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .option-card:hover {
@@ -248,4 +264,66 @@ h1 {
 
 .breakdown-label {
   color: rgba(255,255,255,0.8);
+}
+
+.location-selector {
+  margin-bottom: 2rem;
+}
+
+.location-selector .options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.location-selector .option-card {
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.location-selector .option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.location-selector .option-card.selected {
+  border-color: #4CAF50;
+  background: #f1f8e9;
+}
+
+.location-selector .option-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.location-selector .option-details {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.chicago-only {
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.chicago-only[style*="display: block"] {
+  opacity: 1;
+  height: auto;
+  padding: 1.25rem;
+  margin: 0;
 } 

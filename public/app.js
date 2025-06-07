@@ -1,3 +1,51 @@
+// Location-specific configurations
+const LOCATIONS = {
+  'sa-atx': {
+    base: [-98.4573, 29.7079], // San Antonio, TX (78260) coordinates
+    ratePerMile: 0.65,
+    pricing: {
+      sound: {
+        standard: '250-4-40',
+        premium: '300-4-35',
+        fullStack: '350-4-20'
+      },
+      dj: {
+        none: '0',
+        professional: '100',
+        powerHour: '150-1-0'
+      },
+      visual: {
+        none: '0',
+        basic: '39',
+        premium: '49',
+        immersive: '80'
+      }
+    }
+  },
+  'chicago': {
+    base: [-87.8006, 42.1817], // Highland Park, IL (60035) coordinates
+    ratePerMile: 0.85, // Higher rate due to increased gas prices ($3.60/gal) and maintenance costs
+    pricing: {
+      sound: {
+        standard: '300-4-45',  // 2 PAs, 1 Sub
+        premium: '350-4-45',   // 2 PAs, 2 Subs
+        wallOfBass: '450-4-35', // 2 PAs, 4 Subs + Free Lights
+        fullStack: '550-4-40'   // 4 PAs, 4 Subs + Free Lights
+      },
+      dj: {
+        none: '0',
+        professional: '100',
+        powerHour: '150-1-0'
+      },
+      visual: {
+        none: '0',
+        basic: '10'
+      }
+    }
+  }
+};
+
+let currentLocation = 'sa-atx';
 let selectedOptions = {
   sound: '250-4-40',
   dj: '0',
@@ -7,9 +55,9 @@ let selectedOptions = {
   fuel: '0'
 };
 
-// Base location (78260 - San Antonio area)
-const BASE_LOCATION = [-98.4573, 29.7079]; // San Antonio, TX (78260) coordinates
-const RATE_PER_MILE = 0.65;
+// Base location and rate (will be updated based on selection)
+let BASE_LOCATION = LOCATIONS[currentLocation].base;
+let RATE_PER_MILE = LOCATIONS[currentLocation].ratePerMile;
 let travelDistance = 0;
 
 // OpenRouteService API configuration
@@ -310,8 +358,144 @@ hoursSlider.addEventListener('input', (e) => {
   calculateQuote();
 });
 
-// Initialize the calculator
-initializeApiKey().then(() => {
-  initializeOptionCards();
+// Add location switcher functionality
+function initializeLocationSwitcher() {
+  document.querySelectorAll('#locationOptions .option-card').forEach(card => {
+    card.addEventListener('click', () => {
+      // Update selection UI
+      document.querySelectorAll('#locationOptions .option-card').forEach(c => 
+        c.classList.remove('selected')
+      );
+      card.classList.add('selected');
+
+      // Update location
+      currentLocation = card.dataset.location;
+      BASE_LOCATION = LOCATIONS[currentLocation].base;
+      RATE_PER_MILE = LOCATIONS[currentLocation].ratePerMile;
+
+      // Update pricing
+      updatePricingForLocation();
+
+      // Recalculate if address is entered
+      const address = document.getElementById('eventAddress').value;
+      if (address) {
+        calculateDistance(address);
+      }
+    });
+  });
+}
+
+function updatePricingForLocation() {
+  const pricing = LOCATIONS[currentLocation].pricing;
+  
+  // Update base location for distance calculations
+  BASE_LOCATION = LOCATIONS[currentLocation].base;
+  RATE_PER_MILE = LOCATIONS[currentLocation].ratePerMile;
+  
+  // Recalculate distance if an address is already entered
+  const addressField = document.getElementById('eventAddress');
+  if (addressField && addressField.value) {
+    calculateDistance(addressField.value);
+  }
+
+  // Show/hide Chicago-specific package
+  const chicagoPackage = document.querySelector('#soundOptions .chicago-only');
+  if (chicagoPackage) {
+    chicagoPackage.style.display = currentLocation === 'chicago' ? 'block' : 'none';
+  }
+
+  // Show/hide location-specific visual options
+  document.querySelectorAll('#visualOptions .option-card').forEach(card => {
+    if (currentLocation === 'chicago') {
+      // For Chicago, only show "No Visuals" and the Chicago-specific basic option
+      if (card.classList.contains('chicago-only') || card.dataset.value === '0') {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    } else {
+      // For SA/ATX, show all except Chicago-specific options
+      if (card.classList.contains('chicago-only')) {
+        card.style.display = 'none';
+      } else {
+        card.style.display = 'block';
+      }
+    }
+  });
+  
+  // Update sound package prices and details
+  document.querySelectorAll('#soundOptions .option-card:not(.chicago-only)').forEach((card, index) => {
+    const prices = currentLocation === 'chicago' ? 
+      [pricing.sound.standard, pricing.sound.premium, pricing.sound.fullStack] :
+      [pricing.sound.standard, pricing.sound.premium, pricing.sound.fullStack];
+    
+    if (prices[index]) {
+      card.dataset.value = prices[index];
+      const [base, hours, extra] = prices[index].split('-').map(Number);
+      card.querySelector('.option-price').textContent = `$${base} base (${hours}hrs)`;
+      card.querySelector('.option-extra').textContent = `+$${extra}/hr after`;
+      
+      // Toggle visibility of location-specific details
+      const saDetails = card.querySelector('.sa-atx-details');
+      const chicagoDetails = card.querySelector('.chicago-details');
+      if (saDetails && chicagoDetails) {
+        saDetails.style.display = currentLocation === 'sa-atx' ? 'block' : 'none';
+        chicagoDetails.style.display = currentLocation === 'chicago' ? 'block' : 'none';
+      }
+    }
+  });
+
+  // Update Chicago-only package if visible
+  if (currentLocation === 'chicago' && chicagoPackage) {
+    const wallOfBassPrice = pricing.sound.wallOfBass;
+    const [base, hours, extra] = wallOfBassPrice.split('-').map(Number);
+    chicagoPackage.dataset.value = wallOfBassPrice;
+    chicagoPackage.querySelector('.option-price').textContent = `$${base} base (${hours}hrs)`;
+    chicagoPackage.querySelector('.option-extra').textContent = `+$${extra}/hr after`;
+  }
+
+  // Update DJ prices
+  document.querySelectorAll('#djOptions .option-card').forEach((card, index) => {
+    const prices = [pricing.dj.none, pricing.dj.professional, pricing.dj.powerHour];
+    if (prices[index]) {
+      card.dataset.value = prices[index];
+      if (index === 1) { // Professional DJ
+        card.querySelector('.option-price').textContent = `$${prices[index]}/hr`;
+      } else if (index === 2) { // Power Hour
+        const [base] = prices[index].split('-').map(Number);
+        card.querySelector('.option-price').textContent = `$${base} flat`;
+      }
+    }
+  });
+
+  // Update visual prices
+  document.querySelectorAll('#visualOptions .option-card').forEach((card, index) => {
+    const prices = [pricing.visual.none, pricing.visual.basic, pricing.visual.premium, pricing.visual.immersive];
+    if (prices[index]) {
+      card.dataset.value = prices[index];
+      card.querySelector('.option-price').textContent = `$${prices[index]}`;
+    }
+  });
+
+  // Reset selections to first option in each category
+  ['sound', 'dj', 'visual', 'addon', 'water', 'fuel'].forEach(type => {
+    const firstCard = document.querySelector(`#${type}Options .option-card`);
+    if (firstCard) {
+      document.querySelectorAll(`#${type}Options .option-card`).forEach(c => 
+        c.classList.remove('selected')
+      );
+      firstCard.classList.add('selected');
+      selectedOptions[type] = firstCard.dataset.value;
+    }
+  });
+
+  // Recalculate quote
   calculateQuote();
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', () => {
+  initializeApiKey();
+  initializeLocationSwitcher();
+  initializeOptionCards();
 }); 
