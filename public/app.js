@@ -112,6 +112,9 @@ async function calculateDistance(address) {
   }
 
   try {
+    console.log('Calculating distance for location:', currentLocation);
+    console.log('Using base coordinates:', BASE_LOCATION);
+    
     // First, geocode the address to get coordinates
     const geocodeUrl = `https://api.openrouteservice.org/geocode/search?api_key=${ORS_API_KEY}&text=${encodeURIComponent(address)}`;
     const geocodeResponse = await fetch(geocodeUrl);
@@ -125,26 +128,38 @@ async function calculateDistance(address) {
     }
 
     const [lng, lat] = geocodeData.features[0].geometry.coordinates;
+    console.log('Destination coordinates:', [lng, lat]);
 
     // Calculate matrix distance
+    const matrixBody = {
+      locations: [BASE_LOCATION, [lng, lat]],
+      metrics: ['distance'],
+      units: 'mi'
+    };
+    console.log('Matrix API request body:', matrixBody);
+
     const response = await fetch(ORS_API_URL, {
       method: 'POST',
       headers: {
         'Authorization': ORS_API_KEY,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        locations: [BASE_LOCATION, [lng, lat]],
-        metrics: ['distance'],
-        units: 'mi'
-      })
+      body: JSON.stringify(matrixBody)
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Matrix API error:', errorText);
       throw new Error('Distance calculation failed');
     }
 
     const data = await response.json();
+    console.log('Matrix API response:', data);
+
+    if (!data.distances || !data.distances[0] || typeof data.distances[0][1] !== 'number') {
+      throw new Error('Invalid distance data received');
+    }
+
     travelDistance = data.distances[0][1];
     
     // Update display
@@ -156,6 +171,9 @@ async function calculateDistance(address) {
   } catch (error) {
     console.error('Error calculating distance:', error);
     document.getElementById('distanceDisplay').textContent = error.message || 'Error calculating distance';
+    // Reset travel distance to 0 on error
+    travelDistance = 0;
+    calculateQuote();
   }
 }
 
