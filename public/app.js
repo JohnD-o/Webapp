@@ -349,13 +349,18 @@ function calculateExtraHoursCost(baseValue, hours) {
 
 function calculateQuote() {
   const hours = Number(document.getElementById('hoursSlider').value);
+  console.log('Selected options:', selectedOptions);
   
   // Calculate sound package cost
   const [soundBase] = selectedOptions.sound.split('-').map(Number);
+  console.log('Sound base:', soundBase);
   const soundExtra = calculateExtraHoursCost(selectedOptions.sound, hours);
+  console.log('Sound extra:', soundExtra);
   
   // Calculate visual cost (0 if bundle is selected)
-  const visual = (selectedOptions.sound === '350-4-20' || selectedOptions.sound === '450-4-35') ? 0 : Number(selectedOptions.visual);
+  const visual = (selectedOptions.sound === '350-4-20' || selectedOptions.sound === '450-4-35') ? 0 : 
+    (selectedOptions.visual && selectedOptions.visual !== '0' ? Number(selectedOptions.visual) : 0);
+  console.log('Visual cost:', visual);
   
   // Calculate DJ cost
   const djParts = selectedOptions.dj.split('-');
@@ -367,10 +372,13 @@ function calculateQuote() {
     // Power Hour (flat rate)
     djCost = Number(djParts[0]);
   }
+  console.log('DJ cost:', djCost);
   
   // Calculate addon package cost
   const [addonBase] = selectedOptions.addon.split('-').map(Number) || [0];
+  console.log('Addon base:', addonBase);
   const addonExtra = calculateExtraHoursCost(selectedOptions.addon, hours);
+  console.log('Addon extra:', addonExtra);
 
   // Calculate water cost
   let waterCost = 0;
@@ -385,6 +393,7 @@ function calculateQuote() {
       waterCost = baseWater + (extraHours * hourlyRate);
     }
   }
+  console.log('Water cost:', waterCost);
 
   // Calculate fuel cost
   let fuelCost = 0;
@@ -399,13 +408,17 @@ function calculateQuote() {
       fuelCost = baseFuel + (extraHours * hourlyRate);
     }
   }
+  console.log('Fuel cost:', fuelCost);
 
   // Calculate travel cost
   const travelCost = travelDistance * RATE_PER_MILE;
+  console.log('Travel cost:', travelCost);
   
   // Calculate total
   const total = soundBase + soundExtra + visual + djCost + addonBase + addonExtra + waterCost + fuelCost + travelCost;
+  console.log('Total:', total);
   const perHour = (total / hours).toFixed(2);
+  console.log('Per hour:', perHour);
 
   // Update the display with cost breakdown
   const quoteResult = document.querySelector('#quoteResult');
@@ -519,7 +532,7 @@ function updatePricingForLocation() {
   waterSection.style.display = 'none';
   fuelSection.style.display = 'none';
 
-  // Reset all selections and hide all option-specific sections
+  // Reset all selections
   ['sound', 'dj', 'visual', 'addon', 'water', 'fuel'].forEach(type => {
     // Deselect all cards in this category
     document.querySelectorAll(`#${type}Options .option-card`).forEach(c => {
@@ -531,8 +544,6 @@ function updatePricingForLocation() {
         c.style.display = currentLocation === 'chicago' ? 'block' : 'none';
       }
     });
-    // Reset the selected option to '0'
-    selectedOptions[type] = '0';
   });
 
   // Show/hide Chicago-specific package
@@ -570,7 +581,7 @@ function updatePricingForLocation() {
       // For Chicago, only show "No Visuals" and the Chicago-specific basic option
       if (card.classList.contains('chicago-only') || card.dataset.value === '0') {
         card.style.display = 'block';
-      } else {
+      } else if (card.classList.contains('sa-atx-only')) {
         card.style.display = 'none';
       }
     } else {
@@ -630,26 +641,36 @@ function updatePricingForLocation() {
 
   // Update visual prices
   document.querySelectorAll('#visualOptions .option-card').forEach((card, index) => {
-    const prices = [pricing.visual.none, pricing.visual.basic, pricing.visual.premium, pricing.visual.immersive];
-    if (prices[index]) {
-      card.dataset.value = prices[index];
-      if (prices[index] !== '0') {
-        card.querySelector('.option-price').textContent = `$${prices[index]}`;
+    if (currentLocation === 'chicago') {
+      if (card.classList.contains('chicago-only')) {
+        card.dataset.value = pricing.visual.basic;
+        card.querySelector('.option-price').textContent = `$${pricing.visual.basic}`;
+      }
+    } else {
+      const prices = [pricing.visual.none, pricing.visual.basic, pricing.visual.premium, pricing.visual.immersive];
+      if (prices[index]) {
+        card.dataset.value = prices[index];
+        if (prices[index] !== '0') {
+          card.querySelector('.option-price').textContent = `$${prices[index]}`;
+        }
       }
     }
   });
 
-  // Select first visible option in each category
-  ['sound', 'dj', 'visual', 'addon'].forEach(type => {
-    // Find first visible card
+  // Select first visible option in each category and update selectedOptions
+  ['sound', 'dj', 'visual', 'addon', 'water', 'fuel'].forEach(type => {
     const firstVisibleCard = document.querySelector(`#${type}Options .option-card:not([style*="display: none"])`);
     if (firstVisibleCard) {
       firstVisibleCard.classList.add('selected');
       selectedOptions[type] = firstVisibleCard.dataset.value;
+      console.log(`Selected ${type}:`, selectedOptions[type]); // Debug log
+    } else {
+      selectedOptions[type] = '0';
+      console.log(`No visible card for ${type}, defaulting to 0`); // Debug log
     }
   });
 
-  // Recalculate quote
+  // Recalculate quote with new selections
   calculateQuote();
 }
 
